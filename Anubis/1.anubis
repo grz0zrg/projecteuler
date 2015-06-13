@@ -1,0 +1,129 @@
+ http://www.projecteuler.net
+
+ Multiples of 3 and 5
+    Problem 1
+
+        If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23.
+
+        Find the sum of all the multiples of 3 or 5 below 1000.
+
+ ------------------------------
+
+ This is a generic implementation, this program accept a list of natural number as input.
+ 
+ It is faster than the naive O(n) algorithm (as seen in many other solutions), it can be O(1) if the genericity is dropped.
+
+ Step by step explanation for the sum of all the multiples of 3 or 5 below 1000 (O(1)):
+    1. get the sum of the multiples of 3 (n)
+         q3 = 999 / n
+        sum = ((q3 * (q3 + 1)) / 2) * n
+    2. do the step one with 5 instead of 3
+    3. do the step one with the least common multiple of 3 and 5 (15)
+    4. add the result of step 1 and 2 minus the result of step 3
+
+ This generic solution is like the one above with a bit more work on step 3 (gcm calculation, see the "signed_lcm_list" function)
+
+ ------------------------------
+
+ Usage:
+    anbexec projecteuler_1 max n1 n2 n3 ...
+
+ ------------------------------
+ by Julien Verneuil, 12/06/2015
+ ------------------------------
+
+read tools/int.anubis for lcm and \ operator
+read tools/list.anubis for addition of lists
+read tools/string.anubis for to_decimal and concat
+read tools/cmd_line.anubis for get_parameters
+
+  - signed_lcm_list
+
+    This compute 'each' least common multiple of items in a list (with sign switch for each steps)
+    
+        - Given the list [3, 5, 6]
+
+                +    30
+                    / | \
+                -  15 6 30
+                   \\/ \//
+                +   3 5 6
+
+    The step by step analysis of that function given l = [3, 5, 6] is :
+            h = 3
+            t = [5, [6]]
+            u = 5
+            v = [6]
+            p = signed_lcm_list(t)
+                -   l = [5, [6]]
+                    h = 5
+                    t = [6]
+                    u = 6
+                    v = [], empty list
+                    p = signed_lcm_list(t)
+                        -   l = [6]
+                            h = 6
+                            t = []
+                        [6]
+                    [5, -lcm(5, p0: 6), p0: 6] > [5, -30, 6]
+            [3, -lcm(3, p0: 5), -lcm(3, p1: -30), -lcm(3, p2: 6), p0: 5, p1: -30, p2: 6]
+    Thus [3, -15, 30, -6, 5, -30, 6]
+
+define List(Int) 
+    signed_lcm_list  
+    (
+        List(Int)  l
+    ) =
+    if l is 
+    {
+        [ ] then [ ], 
+
+        [h . t] then 
+            if t is 
+            {
+                [ ] then [h], 
+                [u . v] then
+                    with p = signed_lcm_list(t), 
+
+                    [h] + map((Int x) |-> -lcm(h, x), p) + p
+            }
+    }.
+
+define inline Int sum(Int n) = (n * (n + 1)) \ 2.
+
+define inline String ignore_message(String s) = "Parameter \"" + s + "\" ignored, not a natural number.\n\n".
+
+global define One
+    projecteuler_1
+    (
+        List(String) args
+    ) =
+        with args_as_int = get_parameters(args, 
+                                                (String s) |->
+                                                    if decimal_scan(s) is
+                                                    {
+                                                        failure    then print(ignore_message(s)); failure,
+                                                        success(n) then 
+                                                            if n =< 0 then
+                                                                print(ignore_message(s)); failure
+                                                            else
+                                                                success(n)
+                                                    }),
+
+        if args_as_int is
+        {
+            [ ] then print("Usage:\n    anbexec projecteuler_1 max n1 n2 n3 ...\n\nExample:\n    anbexec projecteuler_1 999 3 5\n"),
+            [max . numbers] then
+                if numbers is
+                {
+                    [ ] then print("No natural number specified.\n"),
+
+                    [_ . _] then
+                        with slcml  = signed_lcm_list(numbers),
+                             result = sum(map(
+                                            ((Int n) |-> sum(max \ abs(n)) * n),
+                                            slcml)),
+
+                        print("The sum of all the multiples of " + concat(map(((Int n) |-> to_decimal(n)), numbers), " or ") + " below " + to_decimal(max + 1) + " is " + to_decimal(result) + ".\n")
+                }
+        }.
