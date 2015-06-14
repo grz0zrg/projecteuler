@@ -39,7 +39,7 @@ read tools/cmd_line.anubis for get_parameters
 
   - signed_lcm_list
 
-    This compute 'each' least common multiple of items in a list (with sign switch for each steps)
+    This compute 'each' least common multiple of items in a list (with sign switch at each steps)
     
         - Given the list [3, 5, 6]
 
@@ -82,7 +82,7 @@ define List(Int)
             if t is 
             {
                 [ ] then [h], 
-                [u . v] then
+                [_ . _] then
                     with p = signed_lcm_list(t), 
 
                     [h] + map((Int x) |-> -lcm(h, x), p) + p
