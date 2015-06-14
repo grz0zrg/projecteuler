@@ -91,7 +91,7 @@ define List(Int)
 
 define inline Int sum(Int n) = (n * (n + 1)) \ 2.
 
-define inline String ignore_message(String s) = "Parameter \"" + s + "\" ignored, not a natural number.\n\n".
+define inline One print_ignore_message(String s) = print("Parameter \"" + s + "\" ignored, not a natural number, you should fix this.\n\n").
 
 global define One
     projecteuler_1
@@ -102,10 +102,10 @@ global define One
                                                 (String s) |->
                                                     if decimal_scan(s) is
                                                     {
-                                                        failure    then print(ignore_message(s)); failure,
+                                                        failure    then print_ignore_message(s); failure,
                                                         success(n) then 
                                                             if n =< 0 then
-                                                                print(ignore_message(s)); failure
+                                                                print_ignore_message(s); failure
                                                             else
                                                                 success(n)
                                                     }),
