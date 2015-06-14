@@ -14,4 +14,4 @@ Result of a benchmark done on a "x64 Ubuntu™ Intel® Q6600® quad-core" machin
 | JavaScript 	|         61        	|
 |    Java    	|        118        	|
 
-Note: Should be taken with a grain of salt, the Java version of the program is surely not the most optimal one.
+Note: Should be taken with a grain of salt, the Java version of the program is surely not an optimal one.
