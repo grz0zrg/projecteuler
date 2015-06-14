@@ -4,7 +4,7 @@ Done for fun and to benchmark the [Anubis programming language](http://fr.wikipe
 
 ======
 
-Result of a benchmark done on a "x64 Ubuntu™ Intel® Q6600® quad-core" machine, each programs are executed 10000 times and the execution time is then averaged
+>Result of a benchmark done on a "x64 Ubuntu™ Intel® Q6600® quad-core" machine, each programs are executed 10000 times
 
 |  language  	| average time (ms) 	|
 |:----------:	|:-----------------:	|
@@ -14,4 +14,4 @@ Result of a benchmark done on a "x64 Ubuntu™ Intel® Q6600® quad-core" machin
 | JavaScript 	|         61        	|
 |    Java    	|        118        	|
 
-Note: Should be taken with a grain of salt, the Java version of the program is surely not an optimal one.
+>Note: Should be taken with a grain of salt, the Java version of the program is surely not an optimal one.
