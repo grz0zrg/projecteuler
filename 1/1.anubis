@@ -93,6 +93,8 @@ define inline Int sum(Int n) = (n * (n + 1)) \ 2.
 
 define inline One print_ignore_message(String s) = print("Parameter \"" + s + "\" ignored, not a natural number, you should fix this.\n\n").
 
+define inline One print_usage = print("Usage:\n    anbexec projecteuler_1 max n1 n2 n3 ...\n\nExample:\n    anbexec projecteuler_1 999 3 5\n").
+
 global define One
     projecteuler_1
     (
@@ -112,11 +114,11 @@ global define One
 
         if args_as_int is
         {
-            [ ] then print("Usage:\n    anbexec projecteuler_1 max n1 n2 n3 ...\n\nExample:\n    anbexec projecteuler_1 999 3 5\n"),
+            [ ] then print_usage,
             [max . numbers] then
                 if numbers is
                 {
-                    [ ] then print("No natural number specified.\n"),
+                    [ ] then print_usage,
 
                     [_ . _] then
                         with slcml  = signed_lcm_list(numbers),

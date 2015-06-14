@@ -38,17 +38,19 @@ to_integer s =
             else
                 Just n
 
+usage = "Usage:\n    projecteuler_1 max n1 n2 n3 ...\n\nExample:\n    projecteuler_1 999 3 5"
+
 main = do
     args <- getArgs
 
     let args_as_int = mapMaybe ( to_integer ) args
         
-    if null args_as_int then putStrLn "Usage:\n    projecteuler_1 max n1 n2 n3 ...\n\nExample:\n    projecteuler_1 999 3 5"
+    if null args_as_int then putStrLn usage
     else do
         let max         = head args_as_int 
             numbers     = tail args_as_int
 
-        if null numbers then putStrLn "No natural number specified."
+        if null numbers then putStrLn usage
         else do
             let slcml       = signed_lcm_list(numbers)
                 result      = sum(map (\x -> integer_sum(max `quot` abs(x)) * x) slcml)
