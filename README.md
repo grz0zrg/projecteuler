@@ -4,7 +4,7 @@ Done for fun and to benchmark the [Anubis programming language](http://fr.wikipe
 
 ======
 
-Result of a benchmark done on a "x64 Ubuntu™ Intel® Q6600® quad-core" machine
+Result of a benchmark done on a "x64 Ubuntu™ Intel® Q6600® quad-core" machine, each programs are executed 10000 times and the execution time is then averaged
 
 |  language  	| average time (ms) 	|
 |:----------:	|:-----------------:	|
