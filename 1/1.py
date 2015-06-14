@@ -13,7 +13,7 @@ def print_ignore_message(s):
     print("Parameter \"" + s + "\" ignored, not a natural number, you should fix this.")
 
 def lcm(a, b):
-    return (a * b // abs(gcd(a, abs(b))))
+    return (a * b // abs(gcd(a, b)))
 
 def n_sum(n):
     return (n * (n + 1)) // 2
@@ -49,11 +49,9 @@ if len(args_as_int) <= 1:
 max = args_as_int.pop(0)
 
 slcml = signed_lcm_list(args_as_int)
-result = []
+result = 0
 
 for n in slcml:
-    result.append(n_sum(max // n) * n)
+    result += n_sum(max // n) * n
 
-result = sum(result)
-
-print("The sum of all the multiples of " + " or ".join(argv[2:]) + " below " + str(max + 1) + " is " + str(result))
+print("The sum of all the multiples of " + " or ".join(argv[2:]) + " below " + str(max + 1) + " is " + str(result) + ".")

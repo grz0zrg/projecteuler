@@ -55,4 +55,4 @@ main = do
             let slcml       = signed_lcm_list(numbers)
                 result      = sum(map (\x -> integer_sum(max `quot` abs(x)) * x) slcml)
 
-            putStrLn("The sum of all the multiples of " ++ intercalate " or " (tail args) ++ " below " ++ show(max + 1) ++ " is " ++ show result)
+            putStrLn("The sum of all the multiples of " ++ intercalate " or " (tail args) ++ " below " ++ show(max + 1) ++ " is " ++ show result ++ ".")
