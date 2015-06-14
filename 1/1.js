@@ -30,7 +30,11 @@ function signed_lcm_list(l) {
     }
 
     var head = l[0],
-        tail = l.slice(1);
+        tail = [];
+
+    for (var i = 1; i < l.length; i += 1) {
+        tail[i - 1] = l[i];
+    }
 
     if (tail.length <= 0) {
         return [head];
@@ -52,8 +56,13 @@ function sum(n) {
     return (n * (n + 1)) / 2;
 }
 
-var args = process.argv.slice(2),
+var argv = process.argv,
+    args = [],
     args_as_int = [];
+
+for (var i = 2; i < argv.length; i += 1) {
+    args[i - 2] = argv[i];
+}
 
 for (var i = 0; i < args.length; i += 1) {
     var n = parseInt(args[i], 10);
@@ -70,7 +79,11 @@ if (args_as_int.length <= 0) {
 }
 
 var max = args_as_int[0],
-    numbers = args_as_int.slice(1);
+    numbers = [];
+
+for (var i = 1; i < args_as_int.length; i += 1) {
+    numbers[i - 1] = args_as_int[i];
+}
 
 if (numbers.length <= 0) {
     print_usage();
