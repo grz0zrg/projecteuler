@@ -98,4 +98,4 @@ for (var i = 0; i < slcml.length; i += 1) {
     result += sum(Math.floor(max / n)) * n;
 }
 
-console.log("The sum of all the multiples of " + args.join(" or ") + " below " + (max + 1) + " is " + result + ".");
+console.log("The sum of all the multiples of " + args.splice(1).join(" or ") + " below " + (max + 1) + " is " + result + ".");
