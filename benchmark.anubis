@@ -1,0 +1,142 @@
+ Benchmark
+
+ Compute the mean executing time of a program called n times 
+
+ ------------------------------
+
+ Usage:
+    anbexec benchmark n_times execution_directory program_to_execute program_args
+
+    n_times is the number of time the program will be executed
+
+ ------------------------------
+ by Julien Verneuil, 14/06/2015
+ ------------------------------
+
+read tools/basis.anubis
+
+ Usefull debug function to monitor the output of the executed program (took it somewhere in the library, slightly modified)
+define One 
+    monitor_out
+    (
+        String name, 
+        RStream conn, 
+        List(Word8) so_far
+    ) =
+        if *conn is 
+        {
+            failure then print(name + " closed.\n"), 
+            success(c) then
+                if c = 10 
+                then print(name + ": " + implode(reverse(so_far)) + "\n");
+                    monitor_out(name, conn, [])
+                else monitor_out(name, conn, [c . so_far])
+        }. 
+
+define Maybe(UTime) check_program_state
+    (
+        ExecuteControl ec,
+        UTime s
+    ) =
+        if check_execute_status(ec) is
+        {
+            still_running        then 
+                //monitor_out("stdout", process_stdout(ec), []); // uncomment to get program standard output
+                check_program_state(ec, s), 
+            abnormal_termination then print("Abnormal termination.\n"); failure,
+            finished(_)          then success(unow - s)
+        }.
+
+define Maybe(UTime) bench
+    (
+        String execution_directory,
+        String program_name,
+        List(String) operands
+    ) =
+        if (Maybe(ExecuteControl))execute(success(execution_directory), program_name, operands) is
+        {
+            failure     then print("\"" + program_name + "\" execution failed.\n"); failure,
+            success(ec) then check_program_state(ec, unow)
+        }.
+
+define UTime sum
+    (
+        List(UTime) ut
+    ) =
+    if ut is
+    {
+        [ ] then utime(0, 0),
+        [h1 . t] then
+            ((List(UTime) utimes, UTime so_far) |-sum->
+                if utimes is {
+                    [ ] then so_far,
+                    [h . t] then
+                        sum(t, so_far + h)
+                }
+                )(t, h1)
+    }.
+
+define inline One print_usage = print("Usage: anbexec benchmark n_times execution_directory program_to_execute args\n").
+
+define inline One print
+    (
+        UTime utime
+    ) =
+    if utime is { utime(s, ms) then print(to_decimal(s) + " " + to_decimal(ms) + "\n") }.
+
+define One print
+    (
+        List(UTime) utimes
+    ) =
+    map_forget((UTime ut) |-> if ut is { utime(s, ms) then print(to_decimal(s) + " " + to_decimal(ms) + "\n") }, utimes).
+
+define inline UTime
+    UTime u1 \ Int n = 
+        if u1 is
+        {
+            utime(s, ms) then
+                with total_result = (ms + s * 1000000) \ n,
+                normalize(utime(0, total_result))
+        }.
+
+global define One benchmark
+    (
+        List(String) args
+    ) =
+        if args is
+        {
+            [ ]     then print_usage,
+            [ns . t] then
+                if t is
+                {
+                    [ ] then print_usage,
+                    [d . t2] then
+                        if t2 is
+                        {
+                            [ ] then print_usage,
+                            [p . pargs] then
+                                with mb_n = decimal_scan(ns),
+                                if mb_n is
+                                {
+                                    failure then print("First argument should be a valid integer.")
+                                    success(n) then
+                                        ((Int so_far, List(UTime) utimes) |-b->
+                                            if so_far =< 0 then
+                                                with utimes_sum = normalize(sum(utimes) \ n),
+                                                if utimes_sum is
+                                                {
+                                                    utime(s, ms) then
+                                                        print(ns + " execution done in " + to_decimal(s) + "s and "  + to_decimal(ms \ 1000) + "ms (average)\n")
+                                                }
+                                            else
+                                                if bench(d, p, pargs) is
+                                                {
+                                                    failure     then unique,
+                                                    success(se) then
+                                                        b(so_far - 1, utimes + [se])
+                                                }
+                                        )(n, [])
+                                }
+                        }
+                }
+        }.
