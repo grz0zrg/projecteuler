@@ -5,7 +5,7 @@
 "use strict";
 
 function print_usage() {
-    console.log("Usage:\n    python 1.py max n1 n2 n3 ...\n\nExample:\n    python 1.py 999 3 5");
+    console.log("Usage (with nodejs):\n    node 1.js max n1 n2 n3 ...\n\nExample:\n    node 1.js 999 3 5");
 }
 
 function gcd(a, b) {
