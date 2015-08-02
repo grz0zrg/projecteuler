@@ -76,6 +76,14 @@ define UTime sum
                 )(t, h1)
     }.
 
+define String pad_left
+    (
+        String s,
+        Int n
+    ) =
+    with l = length(s), 
+    if l >= n then s else constant_string(n-l,' ')+s.
+
 define inline One print_usage = print("Usage: anbexec benchmark n_times execution_directory program_to_execute args\n").
 
 define inline One print
@@ -126,7 +134,7 @@ global define One benchmark
                                                 if utimes_sum is
                                                 {
                                                     utime(s, ms) then
-                                                        print(ns + " execution done in " + to_decimal(s) + "s and "  + to_decimal(ms \ 1000) + "ms (average)\n")
+                                                        print(ns + " execution done in " + pad_left(to_decimal(s), 4) + "s "  + pad_left(to_decimal(ms \ 1000), 4) + "ms (average)\n")
                                                 }
                                             else
                                                 if bench(d, p, pargs) is
