@@ -12,8 +12,10 @@ import Data.List
 import Data.Maybe
 import Text.Read
 
+integer_sum :: Integer -> Integer
 integer_sum n = (n * (n + 1)) `quot` 2
 
+signed_lcm_list :: [Integer] -> [Integer]
 signed_lcm_list l = 
     if null l then []
     else
@@ -24,8 +26,10 @@ signed_lcm_list l =
             let p = signed_lcm_list(t) in
             [h] ++ map (\x -> -(lcm h x)) p ++ p
 
+print_ignore_message :: String -> a -> a
 print_ignore_message s = trace("Parameter \"" ++ s ++ "\" ignored, not a natural number, you should fix this.\n")
 
+to_integer :: String -> Maybe Integer
 to_integer s = 
     case readMaybe s of
         Nothing ->
@@ -38,6 +42,7 @@ to_integer s =
             else
                 Just n
 
+usage :: String
 usage = "Usage:\n    projecteuler_1 max n1 n2 n3 ...\n\nExample:\n    projecteuler_1 999 3 5"
 
 main = do
